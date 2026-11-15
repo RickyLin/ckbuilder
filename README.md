@@ -10,6 +10,25 @@ CKBuilder generates release packages of CKEditor out of its source code.
 You can compile CKBuilder into a single .jar file by running `build_jar.sh` located in the `dev\build` folder. The compiled file will be generated in the `bin` folder.
 [Apache Ant](https://ant.apache.org) is required to run it.
 
+#### Compiling CKBuilder in a container with wslc
+
+If you don't have Java or Ant installed, you can compile CKBuilder in a container instead. The `Dockerfile` in the repository root installs OpenJDK 17 and Ant, runs the same Ant targets as `build_jar.sh`, and produces an image that contains only `ckbuilder.jar`.
+
+On Windows, using [wslc](https://learn.microsoft.com/windows/wsl/) (the WSL container CLI), run the following from the repository root in PowerShell:
+
+	> wslc build -o type=tar,dest=bin/ckbuilder.tar .
+	> tar -xf bin/ckbuilder.tar -C bin; Remove-Item bin/ckbuilder.tar
+
+The compiled file will be generated in the `bin` folder. wslc does not support exporting to a directory (`type=local`), so the jar is exported as a tar archive and extracted.
+
+To run the compiled jar without installing Java locally:
+
+	> wslc run --rm -v "${PWD}:/work" -w /work eclipse-temurin:17-jre java -jar bin/ckbuilder.jar --help
+
+With Docker, the jar can be exported to the `bin` folder directly:
+
+	> docker build -o type=local,dest=bin .
+
 ### Using CKBuilder source files
 
 You can generate a CKEditor release version using CKBuilder source files by running `build.sh` available in the `dev\scripts` folder. The release version of CKEditor will be generated in the `release` folder.

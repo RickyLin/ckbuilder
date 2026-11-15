@@ -1,0 +1,8 @@
+.git
+.idea
+bin
+tmp
+docs/output
+test/tmp
+dev/scripts/ckeditor
+dev/scripts/release
